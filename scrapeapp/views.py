@@ -28,21 +28,22 @@ load_dotenv()
 
 # Set up the Chrome WebDriver options (similar to your existing setup)
 def setup_selenium():
-    import tempfile
-    os.environ["WDM_LOCAL"] = tempfile.mkdtemp()  # Use a writable temporary directory
 
     options = Options()
     user_agent = random.choice(USER_AGENTS)
     options.add_argument(f"user-agent={user_agent}")
 
+
     for option in HEADLESS_OPTIONS:
         options.add_argument(option)
+    
+        # Path to the ChromeDriver binary
+    chromedriver_path = "/usr/local/bin/chromedriver"
 
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    # Create the service object
+    service = Service(chromedriver_path)
 
-    service = Service(ChromeDriverManager().install())
+    # Initialize the WebDriver with the service and options
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
